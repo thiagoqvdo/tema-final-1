@@ -37,7 +37,7 @@ build {
 
     post-processors {
         post-processor "docker-tag" {
-            repository = "qvdo/basic-email-sharer"
+            repository = "${var.dockerhub_username}/basic-email-sharer"
             tags = ["${var.tag}"]
         }
         post-processor "docker-push" {

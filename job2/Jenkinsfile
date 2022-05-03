@@ -1,0 +1,28 @@
+pipeline{
+    agent any
+    stages{
+        stage("Artifactory download"){
+            steps{
+                rtDownload(
+                    serverId: "basic-email-sharer",
+                    spec: """{
+                        "files": [
+                            {
+                                "pattern": "basic-email-sharer/*.jar",
+                                "target": "./"
+                            }
+                        ]
+                    }"""
+                )
+            }
+        }
+        stage("Image build"){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                sh 'packer init ./job2/basic-email-sharer.pkr.hcl'
+                sh 'packer build --var tag=1.0 --var dockerhub_username=$DOCKERHUB_USERNAME --var dockerhub_password=$DOCKERHUB_PASSWORD ./job2/basic-email-sharer.pkr.hcl'
+                }
+            }
+        }
+    }
+}

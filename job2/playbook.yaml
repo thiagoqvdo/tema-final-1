@@ -1,0 +1,16 @@
+---
+- name: "basic-email-sharer"
+  hosts: localhost
+  connection: local
+  become: true
+  
+  tasks:
+    - name: "Update packages"
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: "Install JDK 11"
+      apt:
+        name: openjdk-11-jdk
+        state: present

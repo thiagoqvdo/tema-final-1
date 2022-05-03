@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    stages {
+        stage ('Clone') {
+            steps {
+                git branch: 'master', url: 'https://github.com/thiagoqvdo/basic-email-sharer.git'
+            }
+        }
+        stage ('Build') {
+            steps {
+                sh './gradlew clean build'
+            }
+        }
+        stage ('Upload') {
+            steps {
+                rtUpload (
+                    serverId: 'basic-email-sharer',
+                    spec: """{
+                        "files": [
+                            {
+                                "pattern": "build/libs/*.jar",
+                                "target": "basic-email-sharer"
+                            }
+                        ]
+                    }"""
+                )
+            }
+        }
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: 'basic-email-sharer'
+                )
+            }
+        }
+    }
+}

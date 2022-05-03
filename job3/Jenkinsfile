@@ -1,0 +1,15 @@
+pipeline{
+    agent any
+    stages{
+        stage("Pull image"){
+            steps {
+                sh 'docker pull qvdo/basic-email-sharer:1.0'
+            }
+        }
+        stage("Run basic-email-sharer"){
+            steps {
+                sh 'docker run --name basic-email-sharer -p 8090:8080 qvdo/basic-email-sharer:1.0'
+            }
+        }
+    }
+}

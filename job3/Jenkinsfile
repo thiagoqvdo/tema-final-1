@@ -4,13 +4,13 @@ pipeline{
         stage("Pull image"){
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME')])
-                sh 'docker pull ${var.dockerhub_username}/basic-email-sharer:1.0'
+                sh 'docker pull $DOCKERHUB_USERNAME/basic-email-sharer:1.0'
             }
         }
         stage("Run basic-email-sharer"){
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKERHUB_USERNAME')])
-                sh 'docker run --name basic-email-sharer -p 8090:8080 ${var.dockerhub_username}/basic-email-sharer:1.0'
+                sh 'docker run --name basic-email-sharer -p 8090:8080 $DOCKERHUB_USERNAME/basic-email-sharer:1.0'
             }
         }
     }
